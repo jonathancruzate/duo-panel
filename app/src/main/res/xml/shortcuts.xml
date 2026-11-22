@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <shortcut
+        android:shortcutId="static_left_panel"
+        android:enabled="true"
+        android:icon="@drawable/ic_shortcut_left"
+        android:shortcutShortLabel="@string/shortcut_left_short"
+        android:shortcutLongLabel="@string/shortcut_left_long"
+        android:shortcutDisabledMessage="@string/shortcut_left_disabled">
+        <intent
+            android:action="com.jonathancruzate.duopanel.ACTION_OPEN_STAGE"
+            android:targetPackage="com.jonathancruzate.duopanel"
+            android:targetClass="com.jonathancruzate.duopanel.StageActivity">
+            <extra android:name="extra_side" android:value="LEFT" />
+            <extra android:name="extra_stage_entry" android:value="LEFT" />
+        </intent>
+    </shortcut>
+
+    <shortcut
+        android:shortcutId="static_right_panel"
+        android:enabled="true"
+        android:icon="@drawable/ic_shortcut_right"
+        android:shortcutShortLabel="@string/shortcut_right_short"
+        android:shortcutLongLabel="@string/shortcut_right_long"
+        android:shortcutDisabledMessage="@string/shortcut_right_disabled">
+        <intent
+            android:action="com.jonathancruzate.duopanel.ACTION_OPEN_STAGE"
+            android:targetPackage="com.jonathancruzate.duopanel"
+            android:targetClass="com.jonathancruzate.duopanel.StageActivity">
+            <extra android:name="extra_side" android:value="RIGHT" />
+            <extra android:name="extra_stage_entry" android:value="RIGHT" />
+        </intent>
+    </shortcut>
+</shortcuts>
