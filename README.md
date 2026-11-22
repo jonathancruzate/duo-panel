@@ -179,3 +179,9 @@ Use this checklist when the Galaxy Z Fold 8 arrives:
 | **Target app refuses both Strategy A and Strategy B split-screen** | The app either resists adjacent split intents from a trampoline or prefers freeform / direct two-app pairing. | 1. Test **Try Strategy C (Freeform Half Bounds)** in **Launch Lab**, which uses public `ActivityOptions.setLaunchBounds(Rect)` sized to half the display.<br>2. Create a **Two-App Pair Shortcut** in **DuoPanel → 3. Two-App Pair Shortcuts**.<br>3. In **Samsung Settings → Advanced features → Labs**, enable **Multi window for all apps** on One UI. |
 | **Tapping an app inside the Picker opens it on the other side instead of replacing the Picker** | The Picker's segmented mode control at the top was switched to **Open on other side** instead of the default **Replace this panel**. | Ensure the top segmented toggle in `PickerActivity` is on **Replace this panel** (hint bar: *"Next app opens on THIS panel"*) and that **Settings → Picker Behavior on App Pick** is set to **Auto-Replace (Default)**. |
 | **A cached per-app strategy needs to be re-tested after a One UI update** | `DuoPrefs` caches the last successful strategy (`A`, `B`, or `C`) per package in `SharedPreferences`. | Go to **DuoPanel → Settings → Reset Per-App Strategy Memory** to clear all remembered per-app strategies. |
+
+## Screenshots
+
+![DuoPanel with both panels open on the Galaxy Z Fold](docs/screenshots/duopanel-both-panels.jpg)
+
+![DuoPanel Launch Lab](docs/screenshots/duopanel-launch-lab.jpg)
