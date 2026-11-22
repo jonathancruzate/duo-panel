@@ -1,0 +1,19 @@
+# DuoPanel PATCH 0.1.1 — side-flip calibration (2026-11-21, from the Surface Duo smoke test)
+
+## Problem (measured on the Duo, DUO-DE Android 16, alpha policy OFF)
+The launch engine fires correctly, but this device mirrors split geometry versus DuoPanel's model: when DuoPanel's log says the Picker is on side X, the Picker is physically on the opposite half. Hard evidence from `dumpsys activity activities` + the in-app log:
+- 01:26:09 REPLACE_PANEL_SLOT logged side=RIGHT for Gmail; Gmail's task sits in the split root named "main" with bounds Rect(0,0 - 1338,1800) = LEFT half.
+- 01:28:03 REPLACE_PANEL_SLOT logged side=LEFT for DeskClock; DeskClock's task sits in the split root named "side" with bounds Rect(1363,0 - 2700,1800) = RIGHT half.
+Both replaces inverted => the flip is global on this device, not per-flow. (On the Fold8 the mapping may be normal; that is why this is a per-device calibration, not a hard-coded swap.)
+
+## Changes
+1. **DuoPrefs**: add `flipSides: Boolean` (default false) and `flipCalibrated: Boolean` (default false), persisted in the existing prefs, with getters/setters. Add `fun effectiveSide(requested: PanelSide): PanelSide = if (flipSides) requested.opposite() else requested`.
+2. **Flip at the boundary only** (engine internals unchanged):
+   - `PickerActivity`: when reading EXTRA_SIDE from its launching intent, pass it through `DuoPrefs.effectiveSide(...)` before using it for header, hints, and flow decisions. The header must show the side the user ASKED for (the shortcut's side), while internal flow logic uses the effective side. Simplest correct behavior: store `requestedSide` (for display) and `side = effectiveSide(requestedSide)` (for logic).
+   - `SoloTrampolineActivity`: apply `effectiveSide` to EXTRA_SIDE for Solo launches; for Pair launches, when flipSides is on, swap primary and secondary packages.
+   - Static shortcuts in `res/xml/shortcuts.xml` route through the trampoline/picker intents, so they inherit the flip automatically; do not edit the XML.
+3. **Auto-calibration in PickerActivity**: on resume, if `isInMultiWindowMode` is true and `flipCalibrated` is false, determine the Picker window's physical half: get the root content view's location on screen (`getLocationOnScreen`) plus its width, and the display width via `windowManager.currentWindowMetrics.bounds` (landscape: center x < half => LEFT else RIGHT; portrait: use y/height => TOP is LEFT-equivalent/primary, BOTTOM is RIGHT-equivalent/secondary). Compare with the side the Picker believes it occupies (its own panel side state, i.e. the side it is filling, not the target side). If they differ: set `flipSides = true`, set `flipCalibrated = true`, record a Launch Lab log entry `CALIBRATION_AUTO_FLIP` with both sides in the result text, and Toast "This device mirrors split sides. DuoPanel adjusted automatically." If they match: set `flipCalibrated = true` and log `CALIBRATION_OK`. Never auto-flip more than once (the flag guards it); if flipSides was set manually in Settings, treat that as calibrated (set flipCalibrated = true when the user toggles manually).
+4. **SettingsActivity**: add a switch row "Flip panel sides" with subtitle "Turn on if apps open on the opposite side from the shortcut you tapped. DuoPanel can also set this automatically the first time it detects mirrored splits." Toggling it sets flipSides and flipCalibrated = true.
+5. **Version bump**: versionName "0.1.1", versionCode 2 in app/build.gradle.kts.
+6. **Docs**: README gets a short "Mirrored sides?" troubleshooting entry pointing at the auto-calibration and the Settings toggle. BUILD_NOTES gets a 0.1.1 section marked PENDING VERIFICATION BY MUSE. PROGRESS.md append a 0.1.1 step marked DONE when code is complete.
+7. Do not change launch flags, strategies, or the flows themselves. Do not add permissions. Framework-only, as before.
