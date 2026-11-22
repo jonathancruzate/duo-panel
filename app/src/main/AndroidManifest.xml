@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--
+      DuoPanel deliberately declares:
+      - NO android.permission.INTERNET (zero network access; no data leaves the device)
+      - NO AccessibilityService
+      - NO HOME / Default Launcher role (works alongside Samsung One UI Home)
+    -->
+    <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
+
+    <!--
+      PATCH 0.1.6: install-time permissions for the one-shot MediaProjection capture service
+      (Stage over-app illusion). No runtime-dangerous permissions; capture consent is still
+      requested from the user once per process via the system MediaProjection dialog.
+    -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PROJECTION" />
+
+    <!--
+      PATCH 0.2.0: usage stats for the picker's Recent apps / Frequently used
+      sections. This is a special-access permission: it is only ever granted by
+      the user in the system Usage Access settings, never at runtime, and
+      DuoPanel reads usage live without persisting any of it.
+    -->
+    <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS" />
+
+    <!-- Required on Android 11+ (API 30-36) to list launchable apps in the One UI Picker -->
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent>
+    </queries>
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:label="@string/app_name"
+        android:resizeableActivity="true"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.DuoPanel">
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:resizeableActivity="true"
+            android:windowSoftInputMode="adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <meta-data
+                android:name="android.app.shortcuts"
+                android:resource="@xml/shortcuts" />
+        </activity>
+
+        <!--
+          PickerActivity: The One UI styled second panel & standalone app drawer.
+          Exported=true so pinned Left Panel / Right Panel shortcuts on One UI Home can launch it directly.
+        -->
+        <activity
+            android:name=".PickerActivity"
+            android:configChanges="orientation|screenSize|smallestScreenSize|screenLayout|density|uiMode"
+            android:exported="true"
+            android:label="@string/picker_title_default"
+            android:resizeableActivity="true"
+            android:theme="@style/Theme.DuoPanel.TranslucentPanel"
+            android:windowSoftInputMode="stateHidden|adjustResize">
+            <intent-filter>
+                <action android:name="com.jonathancruzate.duopanel.ACTION_OPEN_PICKER" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <!--
+          StageActivity: PATCH 0.1.6 Simulated Stage. ONE spanned fullscreen window holding the
+          picker pane and companion pane side by side; the Left Panel / Right Panel shortcuts
+          open it. Exported=true so the pinned shortcuts can launch it directly.
+        -->
+        <activity
+            android:name=".StageActivity"
+            android:configChanges="orientation|screenSize|smallestScreenSize|screenLayout|density|uiMode"
+            android:exported="true"
+            android:label="@string/picker_title_default"
+            android:resizeableActivity="true"
+            android:theme="@style/Theme.DuoPanel.TranslucentPanel"
+            android:windowSoftInputMode="stateHidden|adjustResize">
+            <intent-filter>
+                <action android:name="com.jonathancruzate.duopanel.ACTION_OPEN_STAGE" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <!--
+          StageCaptureService: PATCH 0.1.6 minimal one-shot foreground service required for
+          MediaProjection capture on current Android. Starts, grabs one frame, stops.
+        -->
+        <service
+            android:name=".StageCaptureService"
+            android:exported="false"
+            android:foregroundServiceType="mediaProjection" />
+
+        <!--
+          CompanionPanelActivity: Minimal One UI-styled companion surface shown on the non-target
+          panel during corner-shortcut and Solo flows (PATCH 0.1.1C).
+        -->
+        <activity
+            android:name=".CompanionPanelActivity"
+            android:configChanges="orientation|screenSize|smallestScreenSize|screenLayout|density|uiMode"
+            android:exported="false"
+            android:resizeableActivity="true"
+            android:taskAffinity="com.jonathancruzate.duopanel.companion"
+            android:theme="@style/Theme.DuoPanel"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+
+        <!--
+          SoloTrampolineActivity: Invisible trampoline for per-app Solo and Pair pinned shortcuts.
+          Uses Theme.Translucent.NoTitleBar, excludeFromRecents=true, and taskAffinity="" so that
+          the trampoline runs in an ephemeral isolated task rather than pulling MainActivity's task
+          to the foreground or polluting Recents / the back stack. Calls finishAndRemoveTask()
+          after dispatching the split launch sequence.
+        -->
+        <activity
+            android:name=".SoloTrampolineActivity"
+            android:excludeFromRecents="true"
+            android:exported="true"
+            android:taskAffinity=""
+            android:theme="@style/Theme.DuoPanel.Translucent">
+            <intent-filter>
+                <action android:name="com.jonathancruzate.duopanel.ACTION_LAUNCH_SOLO" />
+                <action android:name="com.jonathancruzate.duopanel.ACTION_LAUNCH_PAIR" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <!--
+          AnchorActivity: Invisible re-anchor trampoline used by the LEFT shortcut flow
+          (app goes LEFT/primary, fresh PickerActivity is launched adjacent to RIGHT/secondary).
+          Uses taskAffinity="" and excludeFromRecents="true" so the re-anchored Picker spawns
+          cleanly adjacent to the newly foregrounded primary app task.
+        -->
+        <activity
+            android:name=".AnchorActivity"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:taskAffinity=""
+            android:theme="@style/Theme.DuoPanel.Translucent" />
+
+        <activity
+            android:name=".LaunchLabActivity"
+            android:exported="false"
+            android:label="@string/title_launch_lab"
+            android:resizeableActivity="true" />
+
+        <activity
+            android:name=".SettingsActivity"
+            android:exported="false"
+            android:label="@string/title_settings"
+            android:resizeableActivity="true" />
+
+        <!--
+          HideAppsActivity: PATCH 0.1.7 Part B. One UI style Hide apps screen reached from
+          Settings; hidden packages disappear from DuoPanel's Picker only.
+        -->
+        <activity
+            android:name=".HideAppsActivity"
+            android:exported="false"
+            android:label="Hide apps"
+            android:resizeableActivity="true" />
+
+        <!--
+          DuoNotificationListener: PATCH 0.1.7 Part B. Bound system NotificationListenerService
+          backing Picker icon badges. Tracks active notification COUNTS per package in memory
+          only; reads no notification content, persists nothing. Active only after the user
+          grants Notification access in system settings.
+        -->
+        <service
+            android:name=".DuoNotificationListener"
+            android:exported="true"
+            android:label="DuoPanel notification badges"
+            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
+            <intent-filter>
+                <action android:name="android.service.notification.NotificationListenerService" />
+            </intent-filter>
+        </service>
+
+        <activity
+            android:name=".AboutActivity"
+            android:exported="false"
+            android:label="@string/title_about"
+            android:resizeableActivity="true" />
+
+    </application>
+
+</manifest>
