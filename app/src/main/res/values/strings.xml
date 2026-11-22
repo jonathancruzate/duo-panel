@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">DuoPanel</string>
+    <string name="picker_title_default">App Picker</string>
+    <string name="shortcut_left_short">Left Panel</string>
+    <string name="shortcut_left_long">Open Left Panel Picker</string>
+    <string name="shortcut_left_disabled">Left Panel shortcut unavailable</string>
+    <string name="shortcut_right_short">Right Panel</string>
+    <string name="shortcut_right_long">Open Right Panel Picker</string>
+    <string name="shortcut_right_disabled">Right Panel shortcut unavailable</string>
+    <string name="title_launch_lab">Launch Lab</string>
+    <string name="title_settings">Settings</string>
+    <string name="title_about">About &amp; Honest Limits</string>
+    <string name="toast_split_refused">Split was refused for this app, opened full screen. You can save it as a native App Pair instead.</string>
+</resources>

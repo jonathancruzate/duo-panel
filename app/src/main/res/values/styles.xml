@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.DuoPanel" parent="@android:style/Theme.DeviceDefault.NoActionBar">
+        <item name="android:windowBackground">@color/oneui_bg_black</item>
+        <item name="android:colorBackground">@color/oneui_bg_black</item>
+        <item name="android:colorPrimary">@color/oneui_blue</item>
+        <item name="android:colorPrimaryDark">@color/oneui_bg_black</item>
+        <item name="android:colorAccent">@color/oneui_blue</item>
+        <item name="android:statusBarColor">@color/oneui_bg_black</item>
+        <item name="android:navigationBarColor">@color/oneui_bg_black</item>
+        <item name="android:textColorPrimary">@color/oneui_text_primary</item>
+        <item name="android:textColorSecondary">@color/oneui_text_secondary</item>
+    </style>
+
+    <style name="Theme.DuoPanel.TranslucentPanel" parent="Theme.DuoPanel">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:backgroundDimEnabled">false</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+    </style>
+
+    <style name="Theme.DuoPanel.Translucent" parent="@android:style/Theme.Translucent.NoTitleBar">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:backgroundDimEnabled">false</item>
+    </style>
+</resources>

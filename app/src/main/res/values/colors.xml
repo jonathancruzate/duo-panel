@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Samsung One UI Dark Palette (deep navy-black background + translucent blur scrim + lighter grouped cards) -->
+    <color name="oneui_bg_black">#0B0E1A</color>
+    <color name="oneui_bg_scrim">#B80B0E1A</color>
+    <color name="oneui_focus_block">#1A1E2E</color>
+    <color name="oneui_nested_block">#22273B</color>
+    <color name="oneui_nested_stroke">#282D42</color>
+    <color name="oneui_blue">#0381FE</color>
+    <color name="oneui_blue_dim">#240381FE</color>
+    <color name="oneui_blue_pressed">#0267CB</color>
+    <color name="oneui_text_primary">#FAFAFA</color>
+    <color name="oneui_text_secondary">#9A9FAE</color>
+    <color name="oneui_text_Accent">#0381FE</color>
+    <color name="oneui_status_ok">#2ECC71</color>
+    <color name="oneui_status_warn">#F39C12</color>
+    <color name="oneui_status_danger">#E74C3C</color>
+</resources>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="96dp"
+    android:height="96dp"
+    android:viewportWidth="96"
+    android:viewportHeight="96">
+    <!-- Outer dark squircle container -->
+    <path
+        android:fillColor="#121215"
+        android:pathData="M18,4 L78,4 C85.73,4 92,10.27 92,18 L92,78 C92,85.73 85.73,92 78,92 L18,92 C10.27,92 4,85.73 4,78 L4,18 C4,10.27 10.27,4 18,4 Z" />
+    <!-- Both panels highlighted in One UI Blue for App Pair shortcuts -->
+    <path
+        android:fillColor="#0381FE"
+        android:pathData="M22,18 L43,18 C45.21,18 47,19.79 47,22 L47,74 C47,76.21 45.21,78 43,78 L22,78 C17.58,78 14,74.42 14,70 L14,26 C14,21.58 17.58,18 22,18 Z" />
+    <path
+        android:fillColor="#389BFF"
+        android:pathData="M53,18 L74,18 C78.42,18 82,21.58 82,26 L82,70 C82,74.42 78.42,78 74,78 L53,78 C50.79,78 49,76.21 49,74 L49,22 C49,19.79 50.79,18 53,18 Z" />
+</vector>

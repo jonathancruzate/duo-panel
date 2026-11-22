@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="oneui_screen_margin">16dp</dimen>
+    <dimen name="oneui_block_radius">26dp</dimen>
+    <dimen name="oneui_nested_radius">20dp</dimen>
+    <dimen name="oneui_inner_radius">12dp</dimen>
+    <dimen name="oneui_block_padding">18dp</dimen>
+    <dimen name="oneui_viewing_header_top">20dp</dimen>
+    <dimen name="oneui_viewing_header_bottom">16dp</dimen>
+</resources>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Left rounded panel (highlighted in One UI Blue #0381FE) -->
+    <path
+        android:fillColor="#0381FE"
+        android:pathData="M24,28 C24,23.58 27.58,20 32,20 L48,20 C50.21,20 52,21.79 52,24 L52,84 C52,86.21 50.21,88 48,88 L32,88 C27.58,88 24,84.42 24,80 Z" />
+    <!-- Right rounded panel (dark elevated card with One UI Blue stroke) -->
+    <path
+        android:fillColor="#17171A"
+        android:strokeColor="#0381FE"
+        android:strokeWidth="2.5"
+        android:pathData="M56,24 C56,21.79 57.79,20 60,20 L76,20 C80.42,20 84,23.58 84,28 L84,80 C84,84.42 80.42,88 76,88 L60,88 C57.79,88 56,86.21 56,84 Z" />
+</vector>

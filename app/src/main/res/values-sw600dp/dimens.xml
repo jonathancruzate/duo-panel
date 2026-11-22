@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Generous >= 24dp outer margins on wide screens (Galaxy Z Fold8 unfolded inner display) -->
+    <dimen name="oneui_screen_margin">24dp</dimen>
+    <dimen name="oneui_block_padding">22dp</dimen>
+    <dimen name="oneui_viewing_header_top">28dp</dimen>
+    <dimen name="oneui_viewing_header_bottom">20dp</dimen>
+</resources>
